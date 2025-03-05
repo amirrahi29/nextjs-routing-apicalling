@@ -1,24 +1,35 @@
+import Link from 'next/link';
 import React, { useState } from 'react'
 
-const Home = () => {
+const Home = (props) => {
 
-  const [counter, setCounter] = useState(0);
+  const posts = props.posts;
+  console.log("post-rendering: ",props.posts);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '50vh', 
-        textAlign: 'center',
-      }}>
-      <div>Home</div>
-      <h3>{counter}</h3>
-      <button onClick={() => setCounter(counter + 1)}>Submit</button>
+    <div>
+      <h2>Blog Posts</h2>
+      <br/>
+      <ul>
+        {
+          posts.map((item,index)=>{
+            return <Link href={`posts/${item.id}`}><li key={index} style={{paddingBottom:8}}>{index+1}, {item.title}</li></Link>
+          })
+        }
+        
+      </ul>
     </div>
   )
 }
 
-export default Home
+export default Home;
+
+export async function getStaticProps(){
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const posts = await response.json();
+  return {
+    props:{
+      posts: posts.slice(0,15)
+    }
+  }
+}
