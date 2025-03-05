@@ -3,10 +3,13 @@ import React from 'react'
 
 const postId = ({data}) => {
 
-    // const router = useRouter();
+    const router = useRouter();
     // const id = router.query.id;
 
-    console.log("amir data: ",data);
+    if(router.isFallback){
+        return <>
+        <h4>Loading data....</h4></>
+    }
 
     return (
         <>
@@ -31,7 +34,7 @@ export async function getStaticPaths() {
     })
     return {
         paths,
-        fallback: false
+        fallback: "blocking"
     }
 }
 
